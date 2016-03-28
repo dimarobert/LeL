@@ -34,7 +34,7 @@ module.exports = function (grunt) {
       },
       serverJS: {
         files: _.union(defaultAssets.server.gruntConfig, defaultAssets.server.allJS),
-        tasks: ['eslint'],
+        tasks: ['jshint'],
         options: {
           livereload: true
         }
@@ -47,7 +47,7 @@ module.exports = function (grunt) {
       },
       clientJS: {
         files: defaultAssets.client.js,
-        tasks: ['eslint'],
+        tasks: ['jshint'],
         options: {
           livereload: true
         }
@@ -89,6 +89,17 @@ module.exports = function (grunt) {
       debug: ['nodemon', 'watch', 'node-inspector'],
       options: {
         logConcurrentOutput: true
+      }
+    },
+    jshint: {
+      all: {
+        src: _.union(defaultAssets.server.gruntConfig, defaultAssets.server.allJS, defaultAssets.client.js, testAssets.tests.server, testAssets.tests.client, testAssets.tests.e2e),
+        options: {
+          jshintrc: true,
+          node: true,
+          mocha: true,
+          jasmine: true
+        }
       }
     },
     eslint: {
@@ -179,7 +190,7 @@ module.exports = function (grunt) {
           coverage: true,
           require: 'test.js',
           coverageFolder: 'coverage/server',
-          reportFormats: ['cobertura', 'lcovonly'],
+          reportFormats: ['cobertura','lcovonly'],
           check: {
             lines: 40,
             statements: 40
@@ -207,9 +218,9 @@ module.exports = function (grunt) {
     copy: {
       localConfig: {
         src: 'config/env/local.example.js',
-        dest: 'config/env/local-development.js',
+        dest: 'config/env/local.js',
         filter: function () {
-          return !fs.existsSync('config/env/local-development.js');
+          return !fs.existsSync('config/env/local.js');
         }
       }
     }
@@ -286,7 +297,7 @@ module.exports = function (grunt) {
   });
 
   // Lint CSS and JavaScript files.
-  grunt.registerTask('lint', ['sass', 'less', 'eslint', 'csslint']);
+  grunt.registerTask('lint', ['sass', 'less', 'jshint', 'eslint', 'csslint']);
 
   // Lint project files and minify them into two production files.
   grunt.registerTask('build', ['env:dev', 'lint', 'ngAnnotate', 'uglify', 'cssmin']);

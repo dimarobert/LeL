@@ -17,11 +17,7 @@ var _ = require('lodash'),
 /**
  * Globals
  */
-var user1,
-  admin1,
-  userFromSeedConfig,
-  adminFromSeedConfig,
-  originalLogConfig;
+var user1, admin1, userFromSeedConfig, adminFromSeedConfig, originalLogConfig;
 
 describe('Configuration Tests:', function () {
 
@@ -312,7 +308,7 @@ describe('Configuration Tests:', function () {
         seed
           .start({ logResults: false })
           .then(function () {
-            // we don't ever expect to make it here but we don't want to timeout
+            // we don't ever expect to make it here but we don't want to timeout          
             User.remove(function(err) {
               should.not.exist(err);
               // force this test to fail since we should never be here
@@ -442,7 +438,7 @@ describe('Configuration Tests:', function () {
       };
 
       var options = logger.getOptions();
-      should.deepEqual(options, config.log.options);
+      options.should.deepEqual(config.log.options);
     });
 
     it('should verify that a writable stream was created using the logger configuration', function () {
@@ -465,7 +461,7 @@ describe('Configuration Tests:', function () {
     it('should use the default log format of "combined" when an invalid format was provided', function () {
       // manually set the config log format to be invalid
       config.log = {
-        format: '_some_invalid_format_'
+        format: '_some_invalid_format_'        
       };
 
       var format = logger.getFormat();
@@ -572,7 +568,7 @@ describe('Configuration Tests:', function () {
       var _dir = process.cwd() + '/temp-rotating-logs';
       var _filename = 'unit-test-rotating-access-%DATE%.log';
 
-      // enable rotating logs
+      // enable rotating logs      
       config.log = {
         format: 'combined',
         options: {
