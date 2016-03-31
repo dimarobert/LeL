@@ -1,0 +1,19 @@
+Nelogat
+	-> landing page: informatii platforma
+
+Logat
+	-> Acasa:
+		-> Lista cursurilor la care participi, posibilitatea de continuare a cursului
+		-> Activitatea / nivelul tau, grafic progres
+		-> Activitatea / nivelul prietenilor
+	-> Pagina cursului:
+		-> Lectii grupate in categorii
+		-> Categoriile vor fi deblocate pe parcurs
+	-> Pagina categoriei:
+		-> Lectiile disponibile
+	-> Pagina lectiei:
+		-> Tipuri lectii:
+			-> Grila cu poze
+			-> Traducere propozitie eng -> ro sau cuvant ro -> eng
+			-> Identifica obiectul din imagine (variante de raspuns)
+		-> Evaluarea
