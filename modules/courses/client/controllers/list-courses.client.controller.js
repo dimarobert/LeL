@@ -7,9 +7,9 @@
     .module('courses')
     .controller('CoursesListController', CoursesListController);
 
-  CoursesListController.$inject = ['CoursesService', 'Authentication'];
+  CoursesListController.$inject = ['CoursesService', 'Authentication', '_'];
 
-  function CoursesListController(CoursesService, Authentication) {
+  function CoursesListController(CoursesService, Authentication, _) {
     var vm = this;
 
     vm.user = Authentication.user;
@@ -18,6 +18,6 @@
 
     vm.canEdit = function () {
       return _.intersection(['teacher', 'admin'], vm.user.roles).length;
-    }
+    };
   }
 })();

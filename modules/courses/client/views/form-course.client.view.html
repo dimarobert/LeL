@@ -5,14 +5,285 @@
   <div class="col-md-12">
     <form name="vm.form.courseForm" class="form-horizontal" ng-submit="vm.save(vm.form.courseForm.$valid)" novalidate>
       <fieldset>
+
         <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.course.name" id="name" class="form-control" placeholder="Name" required>
+          <label class="control-label col-sm-2" for="name">Name</label>
+          <div class="col-sm-10">
+            <input name="name" type="text" ng-model="vm.course.name" id="name" class="form-control" placeholder="Name" required>
+          </div>
           <div ng-messages="vm.form.courseForm.name.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Course name is required.</p>
           </div>
         </div>
-        <div class="form-group">
+
+        <!-- Categories Accordion-->
+        <div class="panel-group" id="categories" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default" data-ng-repeat="category in vm.course.categories">
+            <div class="panel-heading" role="tab" id="catheading-{{category.domId()}}">
+              <h4 class="panel-title">
+                <a class="accordion-title" role="button"
+                 data-toggle="collapse" data-parent="#categories"
+                 data-target="#catbody-{{category.domId()}}"
+                 aria-expanded="true" aria-controls="catbody-{{category.domId()}}"
+                 data-ng-bind="category.name||'Unnamed category'"></a>
+                 
+                 <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeCategory($index)"><i class="fa fa-trash"></i></button>
+                 <div class="clearfix"></div>
+              </h4>
+            </div>
+            <div id="catbody-{{category.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="catheading-{{category.domId()}}">
+              <div class="panel-body form-horizontal">
+
+                <div class="form-group">
+                  <label for="catname-{{category.domId()}}" class="control-label col-sm-2">Category Name</label>
+                  <div class="col-sm-10">
+                    <input name="catname-{{category.domId()}}" type="text" ng-model="category.name" class="form-control" placeholder="Category Name"
+                      required>
+                  </div>
+                </div>
+
+                <!-- Chapters Accordion-->
+                <div class="panel-group chapter" id="chapters-{{category.domId()}}" role="tablist" aria-multiselectable="false">
+                  <div class="panel panel-default" data-ng-repeat="chapter in category.chapters">
+                    <div class="panel-heading" role="tab" id="chapheading-{{chapter.domId()}}">
+                      <h4 class="panel-title">
+                        <a class="accordion-title" role="button" data-toggle="collapse"
+                        data-parent="#chapters-{{category.domId()}}" data-target="#chapbody-{{chapter.domId()}}"
+                        aria-expanded="true" aria-controls="chapbody-{{chapter.domId()}}"
+                        data-ng-bind="chapter.name||'Unnamed chapter'"></a>
+                        
+                        <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeChapter(category, $index)"><i class="fa fa-trash"></i></button>
+                        <div class="clearfix"></div>
+                      </h4>
+                    </div>
+                    <div id="chapbody-{{chapter.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="chapheading-{{chapter.domId()}}">
+                      <div class="panel-body">
+
+                        <div class="form-group">
+                          <label for="chapname-{{chapter.domId()}}" class="control-label col-sm-2">Chapter Name</label>
+                          <div class="col-sm-10">
+                            <input name="chapname-{{chapter.domId()}}" type="text" ng-model="chapter.name" class="form-control" placeholder="Chapter Name"
+                              required>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="chapicon-{{chapter.domId()}}" class="control-label col-sm-2">Chapter Icon</label>
+                          <div class="col-sm-10">
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <div ng-class="{'input-group': chapter.icon}">
+                                  <input name="chapicon-{{chapter.domId()}}" type="text" ng-model="chapter.icon" class="form-control" placeholder="Icon path"
+                                    required>
+                                  <span class="input-group-btn" ng-show="chapter.icon">
+                                  <a pop-over id="chapicon-{{chapter.domId()}}"
+                                   class="btn btn-primary" data-trigger="hover" title="Icon preview" data-placement="top"
+                                   data-content="<img width='100' height='100' src='./images/courses/{{chapter.icon}}' />">
+                                    <i class="fa fa-eye"></i>
+                                  </a>
+                                </span>
+                                </div>
+                              </div>
+                              <p class="col-sm-12 text-muted description">
+                                Image paths are relative to <i>'images/courses/'</i> on the server.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Lessons Accordion-->
+                        <div class="panel-group lesson" id="lessons-{{chapter.domId()}}" role="tablist" aria-multiselectable="false">
+                          <div class="panel panel-default" data-ng-repeat="lesson in chapter.lessons">
+                            <div class="panel-heading" role="tab" id="lessheading-{{lesson.domId()}}">
+                              <h4 class="panel-title">
+                                <a class="accordion-title" role="button" data-toggle="collapse"
+                                data-parent="#lessons-{{chapter.domId()}}" data-target="#lessbody-{{lesson.domId()}}"
+                                aria-expanded="true" aria-controls="lessbody-{{lesson.domId()}}"
+                                data-ng-bind="lesson.name||'Unnamed lesson'"></a>
+                                
+                                <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeLesson(chapter, $index)"><i class="fa fa-trash"></i></button>
+                                <div class="clearfix"></div>
+                              </h4>
+                            </div>
+                            <div id="lessbody-{{lesson.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="lessheading-{{lesson.domId()}}">
+                              <div class="panel-body">
+
+                                <div class="form-group">
+                                  <label for="lessname-{{lesson.domId()}}" class="control-label col-sm-2">Lesson Name</label>
+                                  <div class="col-sm-10">
+                                    <input name="lessname-{{lesson.domId()}}" type="text" ng-model="lesson.name" class="form-control" placeholder="Lesson Name"
+                                      required>
+                                  </div>
+                                </div>
+
+                                <!-- Questions Accordion-->
+                                <div class="panel-group question" id="questions-{{lesson.domId()}}" role="tablist" aria-multiselectable="false">
+                                  <div class="panel panel-default" data-ng-repeat="question in lesson.questions">
+                                    <div class="panel-heading" role="tab" id="questheading-{{question.domId()}}">
+                                      <h4 class="panel-title">
+                                        <a class="accordion-title" role="button" data-toggle="collapse"
+                                        data-parent="#questions-{{lesson.domId()}}" data-target="#questbody-{{question.domId()}}"
+                                        aria-expanded="true" aria-controls="questbody-{{question.domId()}}">
+                                        <span>{{(question.caption||'Unnamed question')}}</span><span class="text-muted" ng-show="question.type">&nbsp;({{question.type}})</span>
+                                        </a>
+                                        
+                                        <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeQuestion(lesson, $index)"><i class="fa fa-trash"></i></button>
+                                        <div class="clearfix"></div>
+                                      </h4>
+                                    </div>
+                                    <div id="questbody-{{question.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questheading-{{question.domId()}}">
+                                      <div class="panel-body">
+
+                                        <div class="form-group">
+                                          <label for="questquestion-{{question.domId()}}" class="control-label col-sm-2">Type</label>
+                                          <div class="col-sm-10">
+                                            <select class="form-control" ng-model="question.type" ng-change="vm.resetType(question)">
+                                              <option value="choose-photo">Choose correct photo</option>
+                                              <option value="translate">Translate</option>
+                                              <option value="identify-object">Identify object in image</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="questquestion-{{question.domId()}}" class="control-label col-sm-2">Question</label>
+                                          <div class="col-sm-10">
+                                            <input name="questquestion-{{question.domId()}}" type="text" ng-model="question.caption" class="form-control" placeholder="Question caption"
+                                              required>
+                                          </div>
+                                        </div>
+                                        <div ng-switch="question.type">
+                                          <div ng-switch-when="choose-photo" ng-init="vm.initType(question)">
+                                            <div class="form-group">
+                                              <label class="control-label col-sm-2">Photos</label>
+                                              <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" ng-repeat="photo in question.answers track by $index">
+                                                <div class="form-group">
+                                                  <div class="col-sm-12">
+                                                    <div class="input-group">
+                                                      <span class="input-group-addon">{{$index + 1}}</span>
+                                                      <input type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Photo path" required/>
+                                                      <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
+                                                <button type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                                  data-placement="bottom" title="Add Photo"><i class="fa fa-plus"></i></button>
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label class="control-label col-sm-2">Solution</label>
+                                              <div class="col-sm-10">
+                                                <select class="form-control" ng-model="question.solution" required>
+                                                  <option ng-repeat="photo in question.answers track by $index" value="{{$index}}">Photo {{$index + 1}}</option>
+                                                </select>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div ng-switch-when="translate" ng-init="vm.initType(question)">
+
+                                            <div class="form-group">
+                                              <label for="tr-sol-{{question.domId()}}" class="control-label col-sm-2">Text to translate</label>
+                                              <div class="col-sm-10">
+                                                <input name="tr-sol-{{question.domId()}}" type="text" class="form-control" ng-model="question.answers[0]" placeholder="A sentence or a word"
+                                                  required />
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label for="tr-sol-{{question.domId()}}" class="control-label col-sm-2">Solution</label>
+                                              <div class="col-sm-10">
+                                                <input name="tr-sol-{{question.domId()}}" type="text" class="form-control" ng-model="question.solution" placeholder="The solution for this question"
+                                                  required />
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div ng-switch-when="identify-object" ng-init="vm.initTypet(question)">
+
+                                            <div class="form-group">
+                                              <label for="" class="control-label col-sm-2">Photo</label>
+                                              <div class="col-sm-10">
+                                                <input type="text" class="form-control" ng-model="question.photo" placeholder="Photo path" required>
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label class="control-label col-sm-2">Answers</label>
+                                              <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" ng-repeat="answer in question.answers track by $index">
+                                                <div class="form-group">
+                                                  <div class="col-sm-12">
+                                                    <div class="input-group">
+                                                      <span class="input-group-addon">{{$index + 1}}</span>
+                                                      <input type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Possible answer" required/>
+                                                      <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
+                                                <button type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                                  data-placement="bottom" title="Add Answer"><i class="fa fa-plus"></i></button>
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <label class="control-label col-sm-2">Solution</label>
+                                              <div class="col-sm-10">
+                                                <select class="form-control" ng-model="question.solution" required>
+                                                  <option ng-repeat="answer in question.answers track by $index" value="{{$index}}">{{answer}}</option>
+                                                </select>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                  <button type="button" class="btn btn-success" ng-click="vm.addQuestion(lesson)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                    data-placement="bottom" title="Add Question"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <!-- End Questions Accordion-->
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                          <button type="button" class="btn btn-success" ng-click="vm.addLesson(chapter)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                            data-placement="bottom" title="Add Lesson"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <!-- End Lessons Accordion-->
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3">
+                  <button type="button" class="btn btn-success" ng-click="vm.addChapter(category)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                    data-placement="bottom" title="Add Chapter"><i class="fa fa-plus"></i></button>
+                </div>
+                <!-- End Chapters Accordion-->
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Categories Accordion-->
+
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-success" ng-click="vm.addCategory()" ng-init="vm.initTooltip()" data-toggle="tooltip"
+            data-placement="bottom" title="Add Category"><i class="fa fa-plus"></i></button>
           <button type="submit" class="btn btn-default">{{vm.course._id ? 'Update' : 'Create'}}</button>
         </div>
         <div ng-show="vm.error" class="text-danger">
