@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"mean-dev.courses"},{"v":1,"unique":true,"key":{"categories.name":1},"name":"categories.name_1","ns":"mean-dev.courses","background":true},{"v":1,"unique":true,"key":{"name":1},"name":"name_1","ns":"mean-dev.courses","background":true}]}

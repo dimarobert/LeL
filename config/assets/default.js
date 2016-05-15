@@ -4,15 +4,18 @@ module.exports = {
   client: {
     lib: {
       css: [
-        'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+        'public/lib/bootstrap/dist/css/bootstrap.min.css',
+        'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+        'public/lib/font-awesome/css/font-awesome.css',
         'public/lib/angular-material/angular-material.css',
         'public/lib/angular-chart.js/dist/angular-chart.css'
       ],
       js: [
+        'public/lib/jquery/dist/jquery.min.js',
         'public/lib/lodash/dist/lodash.min.js',
         'public/lib/angular/angular.js',
         'public/lib/Chart.js/Chart.js',
+        'public/lib/bootstrap/dist/js/bootstrap.min.js',
         'public/lib/angular-resource/angular-resource.js',
         'public/lib/angular-animate/angular-animate.js',
         'public/lib/angular-messages/angular-messages.js',
