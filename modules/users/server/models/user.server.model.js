@@ -99,8 +99,11 @@ var UserSchema = new Schema({
     type: Date
   },
   startedCourses: [{
-    type: Schema.ObjectId,
-    ref: 'Course'
+    course: {
+      type: Schema.ObjectId,
+      ref: 'Course'
+    },
+    finishedLessons: [String]
   }]
 });
 

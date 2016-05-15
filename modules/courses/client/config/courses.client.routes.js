@@ -17,6 +17,16 @@
           roles: ['user', 'teacher', 'admin']
         }
       })
+      .state('courses.manage', {
+        url: '/manage',
+        templateUrl: 'modules/courses/client/views/manage-courses.client.view.html',
+        controller: 'CoursesManageController',
+        controllerAs: 'vm',
+        data: {
+          roles: ['admin'],
+          pageTitle: 'Manage Courses'
+        }
+      })
       .state('courses.list', {
         url: '',
         templateUrl: 'modules/courses/client/views/list-courses.client.view.html',
@@ -37,7 +47,7 @@
         },
         data: {
           roles: ['teacher', 'admin'],
-          pageTitle : 'Courses Create'
+          pageTitle: 'Courses Create'
         }
       })
       .state('courses.edit', {
@@ -61,7 +71,7 @@
         resolve: {
           courseResolve: getCourse
         },
-        data:{
+        data: {
           roles: ['user', 'teacher', 'admin'],
           pageTitle: 'Course {{ articleResolve.name }}'
         }

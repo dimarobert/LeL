@@ -27,7 +27,14 @@
     Menus.addSubMenuItem('topbar', 'courses', {
       title: 'Create Course',
       state: 'courses.create',
-    roles: ['teacher', 'admin']
+      roles: ['teacher', 'admin']
+    });
+
+    // Add the dropdown manage item
+    Menus.addSubMenuItem('topbar', 'courses', {
+      title: 'Manage Courses',
+      state: 'courses.manage',
+      roles: ['admin']
     });
   }
 })();

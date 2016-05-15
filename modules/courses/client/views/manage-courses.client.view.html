@@ -1,0 +1,31 @@
+<section>
+    <div class="page-header">
+        <h1>Courses</h1>
+    </div>
+    <div class="list-group">
+        <div data-ng-repeat="course in vm.courses" class="list-group-item">
+            <div class="col-sm-9">
+                <small class="list-group-item-text">
+                    Created on
+                    <span data-ng-bind="course.created | date:'mediumDate'"></span>
+                    by
+                    <span data-ng-if="course.user" data-ng-bind="course.user.displayName"></span>
+                    <span data-ng-if="!course.user" class="text-muted">Deleted User</span>
+                </small>
+                <h4 class="list-group-item-heading" data-ng-bind="course.name"></h4>
+            </div>
+
+            <div class="col-sm-3 manage-btn-group">
+                <div class="btn-group pull-right">
+                <a data-ui-sref="courses.edit({ courseId: course._id })" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+                <a ng-click="vm.remove(course)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-if="vm.courses.$resolved && !vm.courses.length">
+        <span ng-if="vm.canEdit()">No Courses yet, why don't you <a data-ui-sref="courses.create">create one</a>?</span>
+        <span ng-if="!vm.canEdit()">There are no courses yet. Come back when our teachers post some!</span>
+    </div>
+</section>

@@ -6,6 +6,8 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
+var uuid = require('node-uuid');
+
 /**
  * Course Schema
  */
@@ -20,14 +22,32 @@ var CourseSchema = new Schema({
     name: String,
     chapters: [{
       name: String,
-      lesons: [{
+      icon: String,
+      lessons: [{
+        _id: {
+          type: String,
+          default: function () { return uuid(); }
+        },
         name: String,
-        question: String,
-        answers: [String]
+        questions: [{
+          type: {
+            type: String,
+            enum: ['choose-photo', 'translate', 'identify-object']
+          },
+          caption: String,
+          // used for identify-object
+          photo: String,
+          answers: [String],
+          solution: String
+        }]
       }]
     }]
   }],
   created: {
+    type: Date,
+    default: Date.now
+  },
+  lastUpdate: {
     type: Date,
     default: Date.now
   },
