@@ -40,7 +40,7 @@
       .state('courses.create', {
         url: '/create',
         templateUrl: 'modules/courses/client/views/form-course.client.view.html',
-        controller: 'CoursesController',
+        controller: 'CoursesEditController',
         controllerAs: 'vm',
         resolve: {
           courseResolve: newCourse
@@ -53,7 +53,7 @@
       .state('courses.edit', {
         url: '/:courseId/edit',
         templateUrl: 'modules/courses/client/views/form-course.client.view.html',
-        controller: 'CoursesController',
+        controller: 'CoursesEditController',
         controllerAs: 'vm',
         resolve: {
           courseResolve: getCourse
@@ -73,7 +73,31 @@
         },
         data: {
           roles: ['user', 'teacher', 'admin'],
-          pageTitle: 'Course {{ articleResolve.name }}'
+          pageTitle: 'Course {{ courseResolve.name }}'
+        }
+      })
+      .state('courses.viewchapter', {
+        url: '/:courseId/:categoryId/:chapterId',
+        templateUrl: 'modules/courses/client/views/view-chapter.client.view.html',
+        controller: 'ViewChapterController',
+        controllerAs: 'vm',
+        resolve: {
+          courseResolve: getCourse
+        },
+        data: {
+          roles: ['user', 'teacher', 'admin']
+        }
+      })
+      .state('courses.viewlesson', {
+        url: '/:courseId/:categoryId/:chapterId/:lessonId',
+        templateUrl: 'modules/courses/client/views/view-lesson.client.view.html',
+        controller: 'ViewLessonController',
+        controllerAs: 'vm',
+        resolve: {
+          courseResolve: getCourse
+        },
+        data: {
+          roles: ['user', 'teacher', 'admin']
         }
       });
   }

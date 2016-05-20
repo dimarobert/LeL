@@ -6,6 +6,7 @@
     <a data-ng-repeat="course in vm.courses"
        data-ui-sref="courses.view({ courseId: course._id })"
        class="list-group-item">
+      <h3 class="list-group-item-heading" data-ng-bind="course.name"></h3>
       <small class="list-group-item-text">
         Created on
         <span data-ng-bind="course.created | date:'mediumDate'"></span>
@@ -13,7 +14,6 @@
         <span data-ng-if="course.user" data-ng-bind="course.user.displayName"></span>
         <span data-ng-if="!course.user" class="text-muted">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" data-ng-bind="course.name"></h4>
     </a>
   </div>
   <div class="alert alert-warning text-center" data-ng-if="vm.courses.$resolved && !vm.courses.length">

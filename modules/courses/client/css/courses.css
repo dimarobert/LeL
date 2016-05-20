@@ -7,10 +7,14 @@
     padding-top: 15px;
 }
 
+.lesson {
+    padding-top: 0;
+}
+
 .form-group p.description {
-    padding-left: 28px;
+    padding-left: 14px;
 }
 
 .manage-btn-group {
-    padding-top: 5px;
+    padding-top: 9px;
 }
