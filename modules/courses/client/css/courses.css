@@ -18,3 +18,59 @@
 .manage-btn-group {
     padding-top: 9px;
 }
+
+.form-horizontal .checkbox {
+    margin: 0 0 10px 10px;
+}
+
+.category .row {
+    margin-bottom: 40px;
+}
+
+.chapter-thumb {
+    text-align: center;
+    cursor: pointer;
+    min-width: 120px;
+    position: relative;
+}
+
+.chapter-thumb:not(:first-child) {
+    margin-left: 10px;
+}
+
+.chapter-thumb.x2 {
+    min-width: 240px;  
+    padding-left: 10px;  
+}
+
+.chapter-thumb.disabled img {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+.chapter-thumb.x2 img {
+    margin-left: 10px;  
+}
+
+img.chapter-icon {
+    border-radius: 50%;
+    border: 2px #800 solid;
+    width: 80px;
+    height: 80px;
+    z-index: 10;
+}
+
+.chapter-thumb .caption {
+    font-weight: 600;
+    width: 100%;
+    color: transparent;
+    top: 80%;
+    position: absolute;
+    transition: top .3s ease-out, color .4s ease-out;
+    z-index: 1;
+}
+
+.chapter-thumb .caption.hover {
+    color: black;
+    top: 100%;
+}

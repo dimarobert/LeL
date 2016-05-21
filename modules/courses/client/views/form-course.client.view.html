@@ -33,7 +33,7 @@
               </h4>
               </div>
               <div id="catbody-{{category.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="catheading-{{category.domId()}}">
-                <div class="panel-body form-horizontal">
+                <div class="panel-body">
 
                   <div class="form-group" show-errors>
                     <label for="{{catname}}" class="control-label col-sm-2">Category Name</label>
@@ -55,7 +55,8 @@
                           <a class="accordion-title" role="button" data-toggle="collapse"
                           data-parent="#chapters-{{category.domId()}}" data-target="#chapbody-{{chapter.domId()}}"
                           aria-expanded="true" aria-controls="chapbody-{{chapter.domId()}}"
-                          data-ng-bind="chapter.name||'Unnamed chapter'"></a>
+                          ng-style="{'color': (chapter.isSpacer ? '#888' : '')}"
+                          data-ng-bind="vm.getChapterName(chapter)"></a>
                           
                           <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeChapter(category, $index)"><i class="fa fa-trash"></i></button>
                           <div class="clearfix"></div>
@@ -64,47 +65,54 @@
                         <div id="chapbody-{{chapter.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="chapheading-{{chapter.domId()}}">
                           <div class="panel-body">
 
-                            <div class="form-group" show-errors>
-                              <label for="chapname" class="control-label col-sm-2">Chapter Name</label>
-                              <div class="col-sm-10">
-                                <input name="chapname" type="text" ng-model="chapter.name" class="form-control" placeholder="Chapter Name" required>
-                                <div ng-messages="chapterForm.chapname.$error" role="alert">
-                                  <p class="help-block error-text" ng-message="required">Chapter name is required.</p>
-                                </div>
-                              </div>
+                            <div class="checkbox">
+                              <label for="isspacer" class="col-sm-offset-2">
+                                <input name="isspacer" type="checkbox" ng-model="chapter.isSpacer">
+                                New line
+                                </label>
                             </div>
-
-                            <div class="form-group" show-errors>
-                              <label for="chapicon" class="control-label col-sm-2">Chapter Icon</label>
-                              <div class="col-sm-10">
-                                <div class="form-group">
-                                  <div class="col-sm-12">
-                                    <div ng-class="{'input-group': chapter.icon}">
-                                      <input name="chapicon" type="text" ng-model="chapter.icon" class="form-control" placeholder="Icon path" required>
-                                      <div class="input-group-btn" ng-show="chapter.icon">
-                                        <a pop-over id="chapicon-popover" class="btn btn-primary" data-trigger="hover" title="Icon preview" data-placement="top"
-                                          data-content="<img width='100' height='100' src='./images/courses/{{chapter.icon}}' />">
-                                          <i class="fa fa-eye"></i>
-                                        </a>
-                                      </div>
-                                    </div>
-                                    <div ng-messages="chapterForm.chapicon.$error" role="alert">
-                                      <p class="help-block error-text description" ng-message="required">The chapter needs an icon.</p>
-                                    </div>
-                                    <p class="col-sm-12 text-muted description">
-                                      Image paths are relative to <i>'images/courses/'</i> on the server.
-                                    </p>
+                            <div ng-if="!chapter.isSpacer">
+                              <div class="form-group" show-errors>
+                                <label for="chapname" class="control-label col-sm-2">Chapter Name</label>
+                                <div class="col-sm-10">
+                                  <input name="chapname" type="text" ng-model="chapter.name" class="form-control" placeholder="Chapter Name" required>
+                                  <div ng-messages="chapterForm.chapname.$error" role="alert">
+                                    <p class="help-block error-text" ng-message="required">Chapter name is required.</p>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <!-- Lessons Accordion-->
-                            <div class="panel-group lesson" id="lessons-{{chapter.domId()}}" role="tablist" aria-multiselectable="false">
-                              <div class="panel panel-default" data-ng-repeat="lesson in chapter.lessons">
-                                <ng-form name="lessonsForm">
-                                  <div class="panel-heading" role="tab" id="lessheading-{{lesson.domId()}}">
-                                    <h4 class="panel-title">
+                              <div class="form-group" show-errors>
+                                <label for="chapicon" class="control-label col-sm-2">Chapter Icon</label>
+                                <div class="col-sm-10">
+                                  <div class="form-group">
+                                    <div class="col-sm-12">
+                                      <div ng-class="{'input-group': chapter.icon}">
+                                        <input name="chapicon" type="text" ng-model="chapter.icon" class="form-control" placeholder="Icon path" required>
+                                        <div class="input-group-btn" ng-show="chapter.icon">
+                                          <a pop-over id="chapicon-popover" class="btn btn-primary" data-trigger="hover" title="Icon preview" data-placement="top"
+                                            data-content="<img src='./images/courses/{{chapter.icon}}' class='chapter-icon' />">
+                                            <i class="fa fa-eye"></i>
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div ng-messages="chapterForm.chapicon.$error" role="alert">
+                                        <p class="help-block error-text description" ng-message="required">The chapter needs an icon.</p>
+                                      </div>
+                                      <p class="col-sm-12 text-muted description">
+                                        Image paths are relative to <i>'images/courses/'</i> on the server.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Lessons Accordion-->
+                              <div class="panel-group lesson" id="lessons-{{chapter.domId()}}" role="tablist" aria-multiselectable="false">
+                                <div class="panel panel-default" data-ng-repeat="lesson in chapter.lessons">
+                                  <ng-form name="lessonsForm">
+                                    <div class="panel-heading" role="tab" id="lessheading-{{lesson.domId()}}">
+                                      <h4 class="panel-title">
                                       <a class="accordion-title" role="button" data-toggle="collapse"
                                       data-parent="#lessons-{{chapter.domId()}}" data-target="#lessbody-{{lesson.domId()}}"
                                       aria-expanded="true" aria-controls="lessbody-{{lesson.domId()}}"
@@ -113,26 +121,26 @@
                                       <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeLesson(chapter, $index)"><i class="fa fa-trash"></i></button>
                                       <div class="clearfix"></div>
                                     </h4>
-                                  </div>
-                                  <div id="lessbody-{{lesson.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="lessheading-{{lesson.domId()}}">
-                                    <div class="panel-body">
+                                    </div>
+                                    <div id="lessbody-{{lesson.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="lessheading-{{lesson.domId()}}">
+                                      <div class="panel-body">
 
-                                      <div class="form-group" show-errors>
-                                        <label for="lessname" class="control-label col-sm-2">Lesson Name</label>
-                                        <div class="col-sm-10">
-                                          <input name="lessname" type="text" ng-model="lesson.name" class="form-control" placeholder="Lesson Name" required>
-                                          <div ng-messages="lessonsForm.lessname.$error" role="alert">
-                                            <p class="help-block error-text" ng-message="required">Lesson name is required.</p>
+                                        <div class="form-group" show-errors>
+                                          <label for="lessname" class="control-label col-sm-2">Lesson Name</label>
+                                          <div class="col-sm-10">
+                                            <input name="lessname" type="text" ng-model="lesson.name" class="form-control" placeholder="Lesson Name" required>
+                                            <div ng-messages="lessonsForm.lessname.$error" role="alert">
+                                              <p class="help-block error-text" ng-message="required">Lesson name is required.</p>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
 
-                                      <!-- Questions Accordion-->
-                                      <div class="panel-group question" id="questions-{{lesson.domId()}}" role="tablist" aria-multiselectable="false">
-                                        <div class="panel panel-default" data-ng-repeat="question in lesson.questions">
-                                          <ng-form name="questionsForm">
-                                            <div class="panel-heading" role="tab" id="questheading-{{question.domId()}}">
-                                              <h4 class="panel-title">
+                                        <!-- Questions Accordion-->
+                                        <div class="panel-group question" id="questions-{{lesson.domId()}}" role="tablist" aria-multiselectable="false">
+                                          <div class="panel panel-default" data-ng-repeat="question in lesson.questions">
+                                            <ng-form name="questionsForm">
+                                              <div class="panel-heading" role="tab" id="questheading-{{question.domId()}}">
+                                                <h4 class="panel-title">
                                                 <a class="accordion-title" role="button" data-toggle="collapse"
                                                 data-parent="#questions-{{lesson.domId()}}" data-target="#questbody-{{question.domId()}}"
                                                 aria-expanded="true" aria-controls="questbody-{{question.domId()}}">
@@ -142,171 +150,172 @@
                                                 <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeQuestion(lesson, $index)"><i class="fa fa-trash"></i></button>
                                                 <div class="clearfix"></div>
                                               </h4>
-                                            </div>
-                                            <div id="questbody-{{question.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questheading-{{question.domId()}}">
-                                              <div class="panel-body">
+                                              </div>
+                                              <div id="questbody-{{question.domId()}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questheading-{{question.domId()}}">
+                                                <div class="panel-body">
 
-                                                <div class="form-group" show-errors>
-                                                  <label for="questionType" class="control-label col-sm-2">Type</label>
-                                                  <div class="col-sm-10">
-                                                    <select name="questionType" class="form-control" ng-model="question.type" ng-change="vm.resetType(question)" required>
+                                                  <div class="form-group" show-errors>
+                                                    <label for="questionType" class="control-label col-sm-2">Type</label>
+                                                    <div class="col-sm-10">
+                                                      <select name="questionType" class="form-control" ng-model="question.type" ng-change="vm.resetType(question)" required>
                                                       <option value="choose-photo">Choose correct photo</option>
                                                       <option value="translate">Translate</option>
                                                       <option value="identify-object">Identify object in image</option>
                                                     </select>
-                                                    <div ng-messages="questionsForm.questionType.$error" role="alert">
-                                                      <p class="help-block error-text" ng-message="required">Select the question type.</p>
+                                                      <div ng-messages="questionsForm.questionType.$error" role="alert">
+                                                        <p class="help-block error-text" ng-message="required">Select the question type.</p>
+                                                      </div>
                                                     </div>
                                                   </div>
-                                                </div>
-                                                <div class="form-group" show-errors>
-                                                  <label for="questcaption" class="control-label col-sm-2">Question</label>
-                                                  <div class="col-sm-10">
-                                                    <input name="questcaption" type="text" ng-model="question.caption" class="form-control" placeholder="Question caption" required>
-                                                    <div ng-messages="questionsForm.questcaption.$error" role="alert">
-                                                      <p class="help-block error-text" ng-message="required">The question needs a caption.</p>
+                                                  <div class="form-group" show-errors>
+                                                    <label for="questcaption" class="control-label col-sm-2">Question</label>
+                                                    <div class="col-sm-10">
+                                                      <input name="questcaption" type="text" ng-model="question.caption" class="form-control" placeholder="Question caption" required>
+                                                      <div ng-messages="questionsForm.questcaption.$error" role="alert">
+                                                        <p class="help-block error-text" ng-message="required">The question needs a caption.</p>
+                                                      </div>
                                                     </div>
                                                   </div>
-                                                </div>
-                                                <div ng-switch="question.type">
-                                                  <div ng-switch-when="choose-photo" ng-init="vm.initType(question)">
-                                                    <div class="form-group">
-                                                      <label class="control-label col-sm-2">Photos</label>
-                                                      <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" data-ng-repeat="photo in question.answers track by $index">
-                                                        <ng-form name="photoForm">
-                                                          <div class="form-group" show-errors>
-                                                            <div class="col-sm-12">
-                                                              <div class="input-group">
-                                                                <span class="input-group-addon">{{$index + 1}}</span>
-                                                                <input name="photoPath" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Photo path" required/>
-                                                                <div class="input-group-btn">
-                                                                  <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                  <div ng-switch="question.type">
+                                                    <div ng-switch-when="choose-photo" ng-init="vm.initType(question)">
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">Photos</label>
+                                                        <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" data-ng-repeat="photo in question.answers track by $index">
+                                                          <ng-form name="photoForm">
+                                                            <div class="form-group" show-errors>
+                                                              <div class="col-sm-12">
+                                                                <div class="input-group">
+                                                                  <span class="input-group-addon">{{$index + 1}}</span>
+                                                                  <input name="photoPath" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Photo path" required/>
+                                                                  <div class="input-group-btn">
+                                                                    <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                                  </div>
+                                                                </div>
+                                                                <div ng-messages="photoForm.photoPath.$error" role="alert">
+                                                                  <p class="help-block error-text" ng-message="required">Photo path cannot be empty.</p>
                                                                 </div>
                                                               </div>
-                                                              <div ng-messages="photoForm.photoPath.$error" role="alert">
-                                                                <p class="help-block error-text" ng-message="required">Photo path cannot be empty.</p>
-                                                              </div>
                                                             </div>
-                                                          </div>
-                                                        </ng-form>
+                                                          </ng-form>
+                                                        </div>
+                                                        <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
+                                                          <button type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                                            data-placement="bottom" title="Add Photo"><i class="fa fa-plus"></i></button>
+                                                        </div>
                                                       </div>
-                                                      <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
-                                                        <button type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()" data-toggle="tooltip"
-                                                          data-placement="bottom" title="Add Photo"><i class="fa fa-plus"></i></button>
-                                                      </div>
-                                                    </div>
 
-                                                    <div class="form-group" show-errors>
-                                                      <label class="control-label col-sm-2">Solution</label>
-                                                      <div class="col-sm-10">
-                                                        <select name="solcp" class="form-control" ng-model="question.solution" required>
+                                                      <div class="form-group" show-errors>
+                                                        <label class="control-label col-sm-2">Solution</label>
+                                                        <div class="col-sm-10">
+                                                          <select name="solcp" class="form-control" ng-model="question.solution" required>
                                                           <option data-ng-repeat="photo in question.answers track by $index" value="{{$index}}">Photo {{$index + 1}}</option>
                                                         </select>
-                                                        <div ng-messages="questionsForm.solcp.$error" role="alert">
-                                                          <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                          <div ng-messages="questionsForm.solcp.$error" role="alert">
+                                                            <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                          </div>
                                                         </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                                  <div ng-switch-when="translate" ng-init="vm.initType(question)">
+                                                    <div ng-switch-when="translate" ng-init="vm.initType(question)">
 
-                                                    <div class="form-group" show-errors>
-                                                      <label for="trtext" class="control-label col-sm-2">Text to translate</label>
-                                                      <div class="col-sm-10">
-                                                        <input name="trtext" type="text" class="form-control" ng-model="question.answers[0]" placeholder="A sentence or a word" required
-                                                        />
-                                                        <div ng-messages="questionsForm.trtext.$error" role="alert">
-                                                          <p class="help-block error-text" ng-message="required">Without this the question has no meaning.</p>
+                                                      <div class="form-group" show-errors>
+                                                        <label for="trtext" class="control-label col-sm-2">Text to translate</label>
+                                                        <div class="col-sm-10">
+                                                          <input name="trtext" type="text" class="form-control" ng-model="question.answers[0]" placeholder="A sentence or a word" required
+                                                          />
+                                                          <div ng-messages="questionsForm.trtext.$error" role="alert">
+                                                            <p class="help-block error-text" ng-message="required">Without this the question has no meaning.</p>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+
+                                                      <div class="form-group" show-errors>
+                                                        <label for="trsol" class="control-label col-sm-2">Solution</label>
+                                                        <div class="col-sm-10">
+                                                          <input name="trsol" type="text" class="form-control" ng-model="question.solution" placeholder="The solution for this question"
+                                                            required />
+                                                          <div ng-messages="questionsForm.trsol.$error" role="alert">
+                                                            <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                          </div>
                                                         </div>
                                                       </div>
                                                     </div>
+                                                    <div ng-switch-when="identify-object" ng-init="vm.initTypet(question)">
 
-                                                    <div class="form-group" show-errors>
-                                                      <label for="trsol" class="control-label col-sm-2">Solution</label>
-                                                      <div class="col-sm-10">
-                                                        <input name="trsol" type="text" class="form-control" ng-model="question.solution" placeholder="The solution for this question"
-                                                          required />
-                                                        <div ng-messages="questionsForm.trsol.$error" role="alert">
-                                                          <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                      <div class="form-group" show-errors>
+                                                        <label for="iophoto" class="control-label col-sm-2">Photo</label>
+                                                        <div class="col-sm-10">
+                                                          <input name="iophoto" type="text" class="form-control" ng-model="question.photo" placeholder="Photo path" required>
+                                                          <div ng-messages="questionsForm.iophoto.$error" role="alert">
+                                                            <p class="help-block error-text" ng-message="required">Type in the path to the photo.</p>
+                                                          </div>
                                                         </div>
                                                       </div>
-                                                    </div>
-                                                  </div>
-                                                  <div ng-switch-when="identify-object" ng-init="vm.initTypet(question)">
 
-                                                    <div class="form-group" show-errors>
-                                                      <label for="iophoto" class="control-label col-sm-2">Photo</label>
-                                                      <div class="col-sm-10">
-                                                        <input name="iophoto" type="text" class="form-control" ng-model="question.photo" placeholder="Photo path" required>
-                                                        <div ng-messages="questionsForm.iophoto.$error" role="alert">
-                                                          <p class="help-block error-text" ng-message="required">Type in the path to the photo.</p>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                      <label class="control-label col-sm-2">Answers</label>
-                                                      <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" data-ng-repeat="answer in question.answers track by $index">
-                                                        <ng-form name="ioanswersForm">
-                                                          <div class="form-group" show-errors>
-                                                            <div class="col-sm-12">
-                                                              <div class="input-group">
-                                                                <span class="input-group-addon">{{$index + 1}}</span>
-                                                                <input name="ioanswer" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Possible answer"
-                                                                  required/>
-                                                                <div class="input-group-btn">
-                                                                  <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                      <div class="form-group">
+                                                        <label class="control-label col-sm-2">Answers</label>
+                                                        <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" data-ng-repeat="answer in question.answers track by $index">
+                                                          <ng-form name="ioanswersForm">
+                                                            <div class="form-group" show-errors>
+                                                              <div class="col-sm-12">
+                                                                <div class="input-group">
+                                                                  <span class="input-group-addon">{{$index + 1}}</span>
+                                                                  <input name="ioanswer" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Possible answer"
+                                                                    required/>
+                                                                  <div class="input-group-btn">
+                                                                    <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
+                                                                  </div>
+                                                                </div>
+                                                                <div ng-messages="ioanswersForm.ioanswer.$error" role="alert">
+                                                                  <p class="help-block error-text" ng-message="required">Fill this in or remove it.</p>
                                                                 </div>
                                                               </div>
-                                                              <div ng-messages="ioanswersForm.ioanswer.$error" role="alert">
-                                                                <p class="help-block error-text" ng-message="required">Fill this in or remove it.</p>
-                                                              </div>
                                                             </div>
-                                                          </div>
-                                                        </ng-form>
+                                                          </ng-form>
+                                                        </div>
+                                                        <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
+                                                          <button name="ioaddanswer" type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()"
+                                                            data-toggle="tooltip" data-placement="bottom" title="Add Answer"><i class="fa fa-plus"></i></button>
+                                                        </div>
                                                       </div>
-                                                      <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
-                                                        <button name="ioaddanswer" type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()" data-toggle="tooltip"
-                                                          data-placement="bottom" title="Add Answer"><i class="fa fa-plus"></i></button>
-                                                      </div>
-                                                    </div>
 
-                                                    <div class="form-group" show-errors>
-                                                      <label for="iosol" class="control-label col-sm-2">Solution</label>
-                                                      <div class="col-sm-10">
-                                                        <select name="iosol" class="form-control" ng-model="question.solution" required>
+                                                      <div class="form-group" show-errors>
+                                                        <label for="iosol" class="control-label col-sm-2">Solution</label>
+                                                        <div class="col-sm-10">
+                                                          <select name="iosol" class="form-control" ng-model="question.solution" required>
                                                           <option ng-repeat="answer in question.answers track by $index" value="{{$index}}">{{answer}}</option>
                                                         </select>
-                                                        <div ng-messages="questionsForm.iosol.$error" role="alert">
-                                                          <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                          <div ng-messages="questionsForm.iosol.$error" role="alert">
+                                                            <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
+                                                          </div>
                                                         </div>
                                                       </div>
                                                     </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                          </ng-form>
+                                            </ng-form>
+                                          </div>
                                         </div>
-                                      </div>
 
-                                      <div class="col-sm-3">
-                                        <button type="button" class="btn btn-success" ng-click="vm.addQuestion(lesson)" ng-init="vm.initTooltip()" data-toggle="tooltip"
-                                          data-placement="bottom" title="Add Question"><i class="fa fa-plus"></i></button>
-                                      </div>
-                                      <!-- End Questions Accordion-->
+                                        <div class="col-sm-3">
+                                          <button type="button" class="btn btn-success" ng-click="vm.addQuestion(lesson)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                            data-placement="bottom" title="Add Question"><i class="fa fa-plus"></i></button>
+                                        </div>
+                                        <!-- End Questions Accordion-->
 
+                                      </div>
                                     </div>
-                                  </div>
-                                </ng-form>
+                                  </ng-form>
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="col-sm-3">
-                              <button type="button" class="btn btn-success" ng-click="vm.addLesson(chapter)" ng-init="vm.initTooltip()" data-toggle="tooltip"
-                                data-placement="bottom" title="Add Lesson"><i class="fa fa-plus"></i></button>
+                              <div class="col-sm-3">
+                                <button type="button" class="btn btn-success" ng-click="vm.addLesson(chapter)" ng-init="vm.initTooltip()" data-toggle="tooltip"
+                                  data-placement="bottom" title="Add Lesson"><i class="fa fa-plus"></i></button>
+                              </div>
+                              <!-- End Lessons Accordion-->
                             </div>
-                            <!-- End Lessons Accordion-->
 
                           </div>
                         </div>

@@ -27,6 +27,7 @@
 
         vm.addChapter = addChapter;
         vm.removeChapter = removeChapter;
+        vm.getChapterName = getChapterName;
 
         vm.addLesson = addLesson;
         vm.removeLesson = removeLesson;
@@ -42,11 +43,11 @@
         (function () {
             function createScope() {
                 var _args = Array.prototype.slice.call(arguments);
-                return function() { 
+                return function () {
                     return _args.join('-');
                 }
             }
-            
+
             var categories = vm.course.categories;
             for (var catIdx in categories) {
                 categories[catIdx].domId = createScope(catIdx);
@@ -145,6 +146,12 @@
         function removeChapter(category, index) {
             category.chapters && category.chapters.splice(index, 1);
         };
+
+        function getChapterName(chapter) {
+            if (chapter.isSpacer)
+                return 'spacer';
+            return chapter.name || 'Unnamed chapter';
+        }
 
         function addLesson(chapter) {
             !chapter.lessons && (chapter.lessons = []);

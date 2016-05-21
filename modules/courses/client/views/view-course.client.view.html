@@ -13,11 +13,18 @@
     </small>
   </div>
 
-  <div ng-repeat="category in vm.course.categories" ng-init="catId = $index">
-    <div ng-repeat="chapter in category.chapters" data-ui-sref="courses.viewchapter({ courseId: vm.course._id, categoryId: catId, chapterId: $index })">
-      <img width="80px" height="80px" ng-src="./images/courses/{{chapter.icon}}" alt="Chapter {{chapter.name}} icon">
-      <p>{{chapter.name}}</p>
+  <div ng-repeat="category in vm.course.categories" class="category" ng-init="catId = $index">
+    <div ng-repeat="row in vm.chapterRows(category.chapters)" class="row" ng-init="chapters = vm.rowChapters(category.chapters, $index)">
+      <div ng-repeat="chapter in chapters" data-ui-sref="courses.viewchapter({ courseId: vm.course._id, categoryId: catId, chapterId: $index })"
+        class="chapter-thumb {{vm.centerChapter(chapters, $index)}}" ng-class="{ 'x2': chapters.length == 1, 'pull-left': !chapter.isSpacer, 'clearfix': chapter.isSpacer }">
+        <div ng-if="!chapter.isSpacer">
+          <img ng-mouseover="vm.hoverShowCaption($event)" ng-mouseleave="vm.blurHideCaption($event)" class="chapter-icon" ng-src="./images/courses/{{chapter.icon}}"
+            alt="Chapter {{chapter.name}} icon">
+          <p class="caption">{{chapter.name}}</p>
+        </div>
+      </div>
     </div>
+    <div class="clearfix"></div>
   </div>
 
   <p class="lead" data-ng-bind="vm.course.content"></p>

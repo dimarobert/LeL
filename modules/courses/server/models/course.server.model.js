@@ -23,6 +23,7 @@ var CourseSchema = new Schema({
     chapters: [{
       name: String,
       icon: String,
+      isSpacer: Boolean,
       lessons: [{
         _id: {
           type: String,
