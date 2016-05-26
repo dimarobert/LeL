@@ -16,6 +16,9 @@ module.exports = function(app) {
     .get(courses.read)
     .put(courses.update)
     .delete(courses.delete);
+    
+    app.route('/api/courses/:courseId/addPoints').all(coursesPolicy.isAllowed)
+    .post(courses.addPoints);
 
   // Finish by binding the Course middleware
   app.param('courseId', courses.courseByID);

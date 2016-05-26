@@ -4,11 +4,11 @@
     // Courses controller
     angular
         .module('courses')
-        .controller('CoursesEditController', CoursesController);
+        .controller('CoursesEditController', CoursesEditController);
 
-    CoursesController.$inject = ['$scope', '$state', 'Authentication', 'courseResolve'];
+    CoursesEditController.$inject = ['$scope', '$state', 'Authentication', 'courseResolve'];
 
-    function CoursesController($scope, $state, Authentication, course) {
+    function CoursesEditController($scope, $state, Authentication, course) {
         var vm = this;
 
         vm.authentication = Authentication;
@@ -98,7 +98,7 @@
 
                 case 'translate':
                     question.answers = [''];
-                    question.caption = 'Translate the following sentence:';
+                    question.caption = 'Tradu acest text:';
                     break;
 
                 case 'identify-object':
@@ -218,7 +218,6 @@
         };
 
         function addQuestionValidation(form, control, question) {
-            debugger;
             if (question.type == 'identify-object') {
                 addArrayValidation(form, control, question.answers);
             } else {
@@ -266,9 +265,9 @@
             }
 
             function successCallback(res) {
-                $state.go('courses.view', {
+                $state.go('courses.edit', {
                     courseId: res._id
-                });
+                }, { reload: true });
             }
 
             function errorCallback(res) {

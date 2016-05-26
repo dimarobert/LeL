@@ -79,7 +79,7 @@ var UserSchema = new Schema({
   roles: {
     type: [{
       type: String,
-      enum: ['user', 'admin']
+      enum: ['user', 'teacher', 'admin']
     }],
     default: ['user'],
     required: 'Please provide at least one role'
@@ -103,7 +103,10 @@ var UserSchema = new Schema({
       type: Schema.ObjectId,
       ref: 'Course'
     },
-    finishedLessons: [String]
+    finishedLessons: [{
+      id: String,
+      points: Number
+    }]
   }]
 });
 

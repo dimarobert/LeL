@@ -30,15 +30,14 @@ var CourseSchema = new Schema({
           default: function () { return uuid(); }
         },
         name: String,
+        description: String,
         questions: [{
           type: {
             type: String,
-            enum: ['choose-photo', 'translate', 'identify-object']
+            enum: ['choose-photo', 'translate']
           },
           caption: String,
-          // used for identify-object
-          photo: String,
-          answers: [String],
+          answers: [],
           solution: String
         }]
       }]

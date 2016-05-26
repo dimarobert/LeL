@@ -4,16 +4,21 @@
     // Courses controller
     angular
         .module('courses')
-        .controller('ViewChapterController', CoursesController);
+        .controller('ViewChapterController', ViewChapterController);
 
-    CoursesController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'courseResolve'];
+    ViewChapterController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'courseResolve'];
 
-    function CoursesController($scope, $state, $stateParams, Authentication, course) {
+    function ViewChapterController($scope, $state, $stateParams, Authentication, course) {
         var vm = this;
 
         vm.authentication = Authentication;
         vm.course = course;
         vm.error = null;
 
+        (function () {
+            vm.categoryId = $stateParams.categoryId;
+            vm.chapterId = $stateParams.chapterId;
+            vm.chapter = vm.course.categories[vm.categoryId].chapters[vm.chapterId];
+        })();
     };
 })();
