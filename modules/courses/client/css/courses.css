@@ -74,3 +74,53 @@ img.chapter-icon {
     color: black;
     top: 100%;
 }
+
+/* view chapter */
+section#view-chapter .lesson-item:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+/* view lesson */
+section#view-lesson .question-caption {
+    font-size: 2em;
+}
+
+section#view-lesson .img-thumb {
+    border: 3px solid gray;
+    border-radius: 10px;
+    display: inline-block;
+}
+section#view-lesson .img-thumb .img-wrapper {
+    height: 110px;
+}
+section#view-lesson .img-thumb img {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    width: 100%;
+    height: 100%;
+}
+
+section#view-lesson .panel-body {
+    padding-bottom: 0;
+}
+
+section#view-lesson .verification-box.valid {
+    background-color: #def0a5;
+    color: #7eb530;
+}
+
+section#view-lesson .verification-box.invalid {
+    background-color: #ffd4cc;
+    color: #dd381d;
+}
+
+section#view-lesson .result-icon {
+    border-radius: 100%;
+    padding: 20px;
+    margin-left: 15px;
+    margin-top: 15px;
+    display: inline-block;
+    background-color: white;
+    
+}
