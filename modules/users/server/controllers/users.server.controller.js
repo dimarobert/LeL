@@ -13,5 +13,7 @@ module.exports = _.extend(
   require('./users/users.authorization.server.controller'),
   require('./users/users.password.server.controller'),
   require('./users/users.profile.server.controller'),
-  require('./users/users.top15.server.controller')
+  require('./users/users.top15.server.controller'),
+  require('./users/users.startedcourses.server.controller')
+  
 );

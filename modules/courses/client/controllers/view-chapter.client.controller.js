@@ -6,9 +6,9 @@
         .module('courses')
         .controller('ViewChapterController', ViewChapterController);
 
-    ViewChapterController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'courseResolve'];
+    ViewChapterController.$inject = ['$scope', '$state', '$stateParams', 'Authentication', 'UserCourses', 'courseResolve'];
 
-    function ViewChapterController($scope, $state, $stateParams, Authentication, course) {
+    function ViewChapterController($scope, $state, $stateParams, Authentication, UserCourses, course) {
         var vm = this;
 
         vm.authentication = Authentication;
@@ -25,7 +25,11 @@
             vm.chapterId = $stateParams.chapterId;
             vm.chapter = vm.course.categories[vm.categoryId].chapters[vm.chapterId];
 
-            vm.userCourse = vm.authentication.user.startedCourses.find(function (c) { return vm.course._id == c.course; });
+            UserCourses.query().$promise
+                .then(function (r) {
+                    vm.userCourse = r.find(function (c) { return vm.course._id == c.course; });
+                });
+
         })();
 
         function filterLessons(el, idx) {
@@ -38,7 +42,8 @@
             return null;
         }
 
-        function getLessonClass(done, lesson) {
+        function getLessonClass(lesson) {
+            var done = vm.hasUserDoneIt(lesson);
             if (done) {
                 if (done.points < lesson.questions.length * 2 / 3)
                     return 'list-group-item-danger';
@@ -48,7 +53,8 @@
             }
         }
 
-        function getLabelClass(done, lesson) {
+        function getLabelClass(lesson) {
+            var done = vm.hasUserDoneIt(lesson);
             if (done) {
                 if (done.points < lesson.questions.length * 2 / 3)
                     return 'label-danger';

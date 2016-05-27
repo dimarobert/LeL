@@ -12,6 +12,7 @@ module.exports = function (app) {
   app.route('/api/users/picture').post(users.changeProfilePicture);
   app.route('/api/users/top15/:courseId').get(users.top15);
   app.route('/api/users/top15/:courseId/currentuserplace').get(users.currentUserPlace);
+  app.route('/api/users/startedcourses').get(users.startedcourses);
 
   // Finish by binding the user middleware
   app.param('userId', users.userByID);
