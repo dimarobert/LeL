@@ -1,19 +1,48 @@
 Nelogat
 	-> landing page: informatii platforma
-
+	-> buton login
+		 Pagina de logare
+		 - completarea username-ului si a parolei
+	-> buton register
+		Pagina de inregistrare:
+		- campurile: firstname, lastname, email, username si password.
+	
 Logat
 	-> Acasa:
-		-> Lista cursurilor la care participi, posibilitatea de continuare a cursului
-		-> Activitatea / nivelul tau, grafic progres
-		-> Activitatea / nivelul prietenilor
-	-> Pagina cursului:
-		-> Lectii grupate in categorii
-		-> Categoriile vor fi deblocate pe parcurs
-	-> Pagina categoriei:
-		-> Lectiile disponibile
-	-> Pagina lectiei:
-		-> Tipuri lectii:
-			-> Grila cu poze
-			-> Traducere propozitie eng -> ro sau cuvant ro -> eng
-			-> Identifica obiectul din imagine (variante de raspuns)
-		-> Evaluarea
+		-> Top15 useri dupa totalul de puncte 
+			- daca userul logat nu se claseaza in Top15, locul lui va fi afisat separat
+		-> Buton de Start	
+			-> Lista cursurilor disponibile in platforma, posibilitatea de continuare a cursurilor la care participa userul
+		    -> Pagina cursului:
+					-> Cursul este impartit pe categorii
+					-> Fiecare categorie are capitole
+						- fiecare capitol are o imagine reprezentativa
+					-> Fiecare capitol are lectii
+				-> Pagina capitolului:
+					-> Lectiile disponibile cu cateva cuvinte cheie pentru fiecare lectie
+				-> Pagina lectiei:
+					-> Un set de intrebari, care pot fi de doua tipuri
+						1. Grila cu poze
+						2. Traducere cuvant/propozitie eng -> ro sau cuvant/propozitie ro -> eng
+					-> Dupa fiecare raspuns dat se apasa pe butonul "Verifica":
+						- daca era grila si s-a raspuns corect: se adauga 2 puncte la punctajul pe lectie, altfel se afiseaza raspunsul corect
+						- daca era te tip traducere
+							* daca s-a raspuns in totalitate corect (ignorand spatii, simboluri) , adica cu diacritice :2 pct
+							* pentru raspuns partial corect: 1 pct
+							* pentru raspuns gresit: 0 puncte, cu precizarea variantei corecte
+					-> Pentru a trece la intrebarea urmatoare se apasa pe butonul "Urmatoarea"
+					-> La sfarsit de lectie se face evaluarea astfel:
+					- daca userul a facut pentru prima data lectia: se adauga punctajul obtinut
+					- daca userul a mai facut lectia: se va lua punctajul maxim obtinut
+					
+Roluri pentru utilizatori:
+-> user
+	- isi poate schimba firstname, lastname, email si username-ul
+	- isi poate adauga o fotografie de profil
+	- isi poate schimba parola
+-> admin
+ - poate acorda roluri celorlalti useri
+ - poate adauga/edita/sterge cursuri, categorii, capitole si lectii
+-> teacher
+	- poate adauga/edita cursuri, categorii, capitole si lectii
+	
