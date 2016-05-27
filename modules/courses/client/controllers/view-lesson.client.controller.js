@@ -15,9 +15,15 @@
         vm.course = course;
         vm.error = null;
 
+        vm.processPath = processPath;
+        vm.photoClasses = photoClasses;
+
         vm.checkResponse = checkResponse;
         vm.advance = advance;
         vm.endLesson = endLesson;
+
+        vm.score = score;
+        vm.maxScore = maxScore;
 
         (function () {
             vm.categoryId = $stateParams.categoryId;
@@ -31,6 +37,15 @@
             vm.currentQuestion = 0;
             vm.question = vm.lesson.questions[vm.currentQuestion];
         })();
+
+        function processPath(path) {
+            return path.replace(/\\/g, '/');
+        }
+
+
+        function photoClasses(index) {
+            return index == 0 ? 'col-sm-offset-2 col-lg-offset-3' : 'col-sm-offset-0';
+        }
 
         function checkResponse(question) {
             if (vm.verified) return;
@@ -88,7 +103,19 @@
             });
             saveResults.$save({ courseId: vm.course._id, action: 'addPoints' });
 
-            debugger;
+            vm.showResults = true;
+        }
+
+        function score() {
+            var result = 0;
+            for (var q of vm.lesson.questions) {
+                result += q.points || 0;
+            }
+            return result;
+        }
+        
+        function maxScore() {
+            return vm.lesson.questions.length * 2;
         }
 
     };

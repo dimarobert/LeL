@@ -14,11 +14,16 @@
         vm.authentication = Authentication;
         vm.course = course;
         vm.error = null;
+        vm.filterLessons = filterLessons;
 
         (function () {
             vm.categoryId = $stateParams.categoryId;
             vm.chapterId = $stateParams.chapterId;
             vm.chapter = vm.course.categories[vm.categoryId].chapters[vm.chapterId];
         })();
+        
+        function filterLessons(el, idx) {
+            return el.questions.length;
+        }
     };
 })();

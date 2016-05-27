@@ -5,7 +5,7 @@
     </div>
 
     <div class="list-group">
-        <div ng-repeat="lesson in vm.chapter.lessons" data-ui-sref="courses.viewlesson({ courseId: vm.course._id, categoryId: vm.categoryId, chapterId: vm.chapterId, lessonId: $index })"
+        <div ng-repeat="lesson in vm.chapter.lessons | filter:vm.filterLessons" data-ui-sref="courses.viewlesson({ courseId: vm.course._id, categoryId: vm.categoryId, chapterId: vm.chapterId, lessonId: $index })"
             class="list-group-item lesson-item">
             <h3 class="list-group-item-heading" ng-bind="lesson.name"></h3>
             <small class="list-group-item-heading" ng-bind="lesson.description"></small>

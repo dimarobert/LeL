@@ -4,19 +4,23 @@
         <h3 data-ng-bind="vm.lesson.name" style="margin-top: 0;"></h3>
     </div>
 
-    <div class="panel panel-default" ng-init="vm.question = vm.lesson.questions[vm.currentQuestion]">
-        <div class="panel-heading text-center question-caption">{{vm.question.caption}} <span class="pull-right">{{vm.currentQuestion+1}}/{{vm.lesson.questions.length}}</span></div>
+    <div class="panel panel-default" ng-if="!vm.showResults" ng-init="vm.question = vm.lesson.questions[vm.currentQuestion]">
+        <div class="panel-heading text-center question-caption">
+            {{vm.question.caption}}
+            <span class="pull-right">{{vm.currentQuestion+1}}/{{vm.lesson.questions.length}}</span>
+            <div class="clearfix"></div>
+        </div>
         <div class="panel-body">
             <div ng-switch="vm.question.type">
                 <div ng-switch-when="choose-photo">
                     <div class="row">
-                        <div class="form-group">
-                            <div class="col-sm-2" ng-class="{'col-sm-offset-3': $index == 0}" ng-repeat="photo in vm.question.answers">
+                        <div class="form-group choose-photo text-center">
+                            <div class="col-xs-offset-4 col-xs-4 col-sm-3 col-md-3 col-lg-2 {{vm.photoClasses($index)}}" ng-repeat="photo in vm.question.answers">
                                 <div class="img-thumb">
                                     <div class="img-wrapper">
-                                        <img src="/images/{{photo.path}}" alt="{{photo.caption}}">
+                                        <div class="img" ng-style="{'background-image': 'url(/images/'+vm.processPath(photo.path)+')'}"></div>
                                     </div>
-                                    <div class="radio col-sm-12">
+                                    <div class="radio col-sm-12 text-left">
                                         <label for="cp-answer{{$index}}">
                                             <input type="radio" id="cp-answer{{$index}}" name="cp-answer" ng-model="vm.question.response" value="{{$index}}" />
                                             {{photo.caption}}
@@ -42,21 +46,17 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group" ng-if="!vm.verified">
-                    <div class="col-sm-2 col-sm-offset-7">
+                <div class="form-group button-box">
+                    <div ng-if="!vm.verified" class="col-sm-offset-9 col-sm-2 col-lg-offset-7">
                         <input type="button" class="btn btn-success pull-right" value="Verifică" ng-click="vm.checkResponse(vm.question)" ng-disabled="!vm.question.response"
                         />
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group" ng-if="vm.verified && !vm.finished">
-                    <div class="col-sm-2 col-sm-offset-7">
-                        <input type="button" class="btn btn-primary pull-right" value="Următorul" ng-click="vm.advance()" />
+
+                    <div ng-if="vm.verified && !vm.finished" class="col-sm-offset-9 col-sm-2 col-lg-offset-7">
+                        <input type="button" class="btn btn-primary pull-right" value="Următoarea" ng-click="vm.advance()" />
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="form-group" ng-if="vm.verified && vm.finished">
-                    <div class="col-sm-2 col-sm-offset-7">
+
+                    <div ng-if="vm.verified && vm.finished" class="col-sm-offset-9 col-sm-2 col-lg-offset-7">
                         <input type="button" class="btn btn-success pull-right" value="Continuă" ng-click="vm.endLesson()" />
                     </div>
                     <div class="clearfix"></div>
@@ -65,17 +65,17 @@
             <div class="row verification-box" ng-class="{'invalid': vm.correctResponse == 'no', 'valid': vm.correctResponse == 'yes', 'partial': vm.correctResponse == 'partial'}"
                 ng-if="vm.verified">
                 <div class="form-group">
-                    <div ng-if="vm.correctResponse == 'yes'" class="col-sm-1">
+                    <div ng-if="vm.correctResponse == 'yes' || vm.correctResponse == 'partial'" class="result">
                         <div class="result-icon">
                             <i class="fa fa-2x fa-check"></i>
                         </div>
                     </div>
-                    <div ng-if="vm.correctResponse == 'no'" class="col-sm-1">
+                    <div ng-if="vm.correctResponse == 'no'" class="result">
                         <div class="result-icon">
                             <i class="fa fa-2x fa-times"></i>
                         </div>
                     </div>
-                    <div class="col-sm-9" ng-switch="vm.question.type">
+                    <div class="result-text" ng-switch="vm.question.type">
                         <div ng-switch-when="choose-photo">
                             <div ng-if="vm.correctResponse == 'yes'">
                                 <h3>Răspuns corect!</h3>
@@ -89,6 +89,10 @@
                             <div ng-if="vm.correctResponse == 'yes'">
                                 <h3>Răspuns corect!</h3>
                             </div>
+                            <div ng-if="vm.correctResponse == 'partial'">
+                                <h3>Răspuns parțial corect!</h3>
+                                <h6>Răspunsul corect: <b>{{vm.question.solution}}</b></h6>
+                            </div>
                             <div ng-if="vm.correctResponse == 'no'">
                                 <h3>Răspuns greșit!</h3>
                                 <h6>Răspunsul corect: <b>{{vm.question.solution}}</b></h6>
@@ -100,5 +104,18 @@
             </div>
         </div>
     </div>
+
+    <div class="panel panel-success" ng-class="{'panel-success': vm.score() >= vm.maxScore()/2, 'panel-danger': vm.score() < vm.maxScore()/2}"
+        ng-if="vm.showResults" ng-init="vm.question = vm.lesson.questions[vm.currentQuestion]">
+        <div class="panel-heading text-center question-caption">
+            Rezultate
+        </div>
+        <div class="panel-body">
+            <h3 class="text-center">Ai obținut {{vm.score()}} puncte.</h3>
+            <div class="form-group text-center">
+                <input class="btn" ng-class="{'btn-success': vm.score() >= vm.maxScore()/2, 'btn-danger': vm.score() < vm.maxScore()/2}"
+                    type="button" value="Finalizează" data-ui-sref="courses.viewchapter({courseId: vm.course._id, categoryId: vm.categoryId, chapterId: vm.chapterId})">
+            </div>
+        </div>
     </div>
 </section>

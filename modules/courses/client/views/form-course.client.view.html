@@ -16,7 +16,7 @@
           </div>
         </div>
 
-        <!-- Categories Accordion-->
+        <!-- Categories Accordion -->
         <div class="panel-group" id="categories" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default" data-ng-repeat="category in vm.course.categories">
             <ng-form name="categoryForm" ng-init="catname = 'catname-' + category.domId()">
@@ -26,7 +26,7 @@
                  data-toggle="collapse" data-parent="#categories"
                  data-target="#catbody-{{category.domId()}}"
                  aria-expanded="true" aria-controls="catbody-{{category.domId()}}"
-                 data-ng-bind="category.name||'Unnamed category'"></a>
+                 data-ng-bind="(category.name||'Unnamed category') + '  (category)'"></a>
                  
                  <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeCategory($index)"><i class="fa fa-trash"></i></button>
                  <div class="clearfix"></div>
@@ -56,7 +56,7 @@
                           data-parent="#chapters-{{category.domId()}}" data-target="#chapbody-{{chapter.domId()}}"
                           aria-expanded="true" aria-controls="chapbody-{{chapter.domId()}}"
                           ng-style="{'color': (chapter.isSpacer ? '#888' : '')}"
-                          data-ng-bind="vm.getChapterName(chapter)"></a>
+                          data-ng-bind="vm.getChapterName(chapter) + '  (chapter)'"></a>
                           
                           <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeChapter(category, $index)"><i class="fa fa-trash"></i></button>
                           <div class="clearfix"></div>
@@ -116,7 +116,7 @@
                                       <a class="accordion-title" role="button" data-toggle="collapse"
                                       data-parent="#lessons-{{chapter.domId()}}" data-target="#lessbody-{{lesson.domId()}}"
                                       aria-expanded="true" aria-controls="lessbody-{{lesson.domId()}}"
-                                      data-ng-bind="lesson.name||'Unnamed lesson'"></a>
+                                      data-ng-bind="(lesson.name||'Unnamed lesson') + '  (lesson)'"></a>
                                       
                                       <button type="button" class="btn btn-sm btn-danger pull-right" ng-click="vm.removeLesson(chapter, $index)"><i class="fa fa-trash"></i></button>
                                       <div class="clearfix"></div>
@@ -131,6 +131,15 @@
                                             <input name="lessname" type="text" ng-model="lesson.name" class="form-control" placeholder="Lesson Name" required>
                                             <div ng-messages="lessonsForm.lessname.$error" role="alert">
                                               <p class="help-block error-text" ng-message="required">Lesson name is required.</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="form-group" show-errors>
+                                          <label for="lessdesc" class="control-label col-sm-2">Lesson Description</label>
+                                          <div class="col-sm-10">
+                                            <input name="lessdesc" type="text" ng-model="lesson.description" class="form-control" placeholder="Lesson Description" required>
+                                            <div ng-messages="lessonsForm.lessdesc.$error" role="alert">
+                                              <p class="help-block error-text" ng-message="required">Lesson description is required.</p>
                                             </div>
                                           </div>
                                         </div>
@@ -186,13 +195,23 @@
                                                               <div class="col-sm-12">
                                                                 <div class="input-group">
                                                                   <span class="input-group-addon">{{$index + 1}}</span>
-                                                                  <input name="photoPath" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Photo path" required/>
+                                                                  <input name="photoPath" type="text" class="form-control" ng-model="question.answers[$index].path" placeholder="Photo path"
+                                                                    required/>
                                                                   <div class="input-group-btn">
                                                                     <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
                                                                   </div>
                                                                 </div>
                                                                 <div ng-messages="photoForm.photoPath.$error" role="alert">
                                                                   <p class="help-block error-text" ng-message="required">Photo path cannot be empty.</p>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                  <div class="col-sm-12 photo-caption">
+                                                                    <input name="photoCaption" type="text" class="form-control" ng-model="question.answers[$index].caption" placeholder="Photo caption"
+                                                                      required/>
+                                                                  </div>
+                                                                </div>
+                                                                <div ng-messages="photoForm.photoCaption.$error" role="alert">
+                                                                  <p class="help-block error-text" ng-message="required">Photo caption cannot be empty.</p>
                                                                 </div>
                                                               </div>
                                                             </div>
@@ -240,57 +259,7 @@
                                                         </div>
                                                       </div>
                                                     </div>
-                                                    <div ng-switch-when="identify-object" ng-init="vm.initTypet(question)">
-
-                                                      <div class="form-group" show-errors>
-                                                        <label for="iophoto" class="control-label col-sm-2">Photo</label>
-                                                        <div class="col-sm-10">
-                                                          <input name="iophoto" type="text" class="form-control" ng-model="question.photo" placeholder="Photo path" required>
-                                                          <div ng-messages="questionsForm.iophoto.$error" role="alert">
-                                                            <p class="help-block error-text" ng-message="required">Type in the path to the photo.</p>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                        <label class="control-label col-sm-2">Answers</label>
-                                                        <div class="col-sm-10" ng-class="{'col-sm-offset-2': $index > 0}" data-ng-repeat="answer in question.answers track by $index">
-                                                          <ng-form name="ioanswersForm">
-                                                            <div class="form-group" show-errors>
-                                                              <div class="col-sm-12">
-                                                                <div class="input-group">
-                                                                  <span class="input-group-addon">{{$index + 1}}</span>
-                                                                  <input name="ioanswer" type="text" class="form-control" ng-model="question.answers[$index]" placeholder="Possible answer"
-                                                                    required/>
-                                                                  <div class="input-group-btn">
-                                                                    <button type="button" class="btn btn-danger" ng-click="vm.removeAnswer(question, $index)"><i class="fa fa-trash"></i></button>
-                                                                  </div>
-                                                                </div>
-                                                                <div ng-messages="ioanswersForm.ioanswer.$error" role="alert">
-                                                                  <p class="help-block error-text" ng-message="required">Fill this in or remove it.</p>
-                                                                </div>
-                                                              </div>
-                                                            </div>
-                                                          </ng-form>
-                                                        </div>
-                                                        <div class="col-sm-3" ng-class="{'col-sm-offset-2': question.answers.length > 0}">
-                                                          <button name="ioaddanswer" type="button" class="btn btn-success" ng-click="vm.addAnswer(question)" ng-init="vm.initTooltip()"
-                                                            data-toggle="tooltip" data-placement="bottom" title="Add Answer"><i class="fa fa-plus"></i></button>
-                                                        </div>
-                                                      </div>
-
-                                                      <div class="form-group" show-errors>
-                                                        <label for="iosol" class="control-label col-sm-2">Solution</label>
-                                                        <div class="col-sm-10">
-                                                          <select name="iosol" class="form-control" ng-model="question.solution" required>
-                                                          <option ng-repeat="answer in question.answers track by $index" value="{{$index}}">{{answer}}</option>
-                                                        </select>
-                                                          <div ng-messages="questionsForm.iosol.$error" role="alert">
-                                                            <p class="help-block error-text" ng-message="required">What question is that without an answer?</p>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
+                                                    
                                                   </div>
                                                 </div>
                                               </div>
