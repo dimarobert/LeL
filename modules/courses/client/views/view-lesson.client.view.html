@@ -114,7 +114,7 @@
             <h3 class="text-center">Ai obținut {{vm.score()}} puncte.</h3>
             <div class="form-group text-center">
                 <input class="btn" ng-class="{'btn-success': vm.score() >= vm.maxScore()/2, 'btn-danger': vm.score() < vm.maxScore()/2}"
-                    type="button" value="Finalizează" data-ui-sref="courses.viewchapter({courseId: vm.course._id, categoryId: vm.categoryId, chapterId: vm.chapterId})">
+                    type="button" value="Finalizează" ng-click="vm.finish()">
             </div>
         </div>
     </div>

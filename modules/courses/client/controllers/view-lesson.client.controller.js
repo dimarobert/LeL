@@ -25,6 +25,8 @@
         vm.score = score;
         vm.maxScore = maxScore;
 
+        vm.finish = finish;
+
         (function () {
             vm.categoryId = $stateParams.categoryId;
             vm.chapterId = $stateParams.chapterId;
@@ -113,10 +115,17 @@
             }
             return result;
         }
-        
+
         function maxScore() {
             return vm.lesson.questions.length * 2;
         }
 
+        function finish() {
+            $state.go('courses.viewchapter', {
+                courseId: vm.course._id,
+                categoryId: vm.categoryId,
+                chapterId: vm.chapterId
+            }, { reload: true })
+        }
     };
 })();

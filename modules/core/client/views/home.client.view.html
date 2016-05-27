@@ -43,7 +43,7 @@
             <th>Points</th>
           </tr>
 
-          <tr ng-repeat="user in getTop15($index)" ng-class="{success: user._id == authentication.user._id}">
+          <tr ng-repeat="user in getTop15(course)" ng-class="{success: user._id == authentication.user._id}">
             <td>{{$index + 1}}</td>
             <td>{{user.displayName}}</td>
             <td>{{user.score}}</td>
@@ -54,9 +54,9 @@
             <td></td>
           </tr>
           <tr ng-if="userNotInTop15($index)" class="success">
-            <td>{{userPlace[$index].place}}</td>
+            <td>{{userPlace[$index].result.place}}</td>
             <td>{{authentication.user.displayName}}</td>
-            <td>{{userPlace[$index].score}}</td>
+            <td>{{userPlace[$index].result.score}}</td>
           </tr>
         </table>
       </div>

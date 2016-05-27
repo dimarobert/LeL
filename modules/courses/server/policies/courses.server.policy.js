@@ -18,19 +18,37 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/courses',
       permissions: '*'
     }, {
-      resources: '/api/courses/:courseId',
-      permissions: '*'
-    }]
+        resources: '/api/courses/:courseId',
+        permissions: '*'
+      }, {
+        resources: '/api/courses/:courseId/addPoints',
+        permissions: '*'
+      }]
   }, {
-    roles: ['user'],
-    allows: [{
-      resources: '/api/courses',
-      permissions: ['get']
+      roles: ['teacher'],
+      allows: [{
+        resources: '/api/courses',
+        permissions: ['get']
+      }, {
+          resources: '/api/courses/:courseId',
+          permissions: ['get']
+        }, {
+          resources: '/api/courses/:courseId/addPoints',
+          permissions: '*'
+        }]
     }, {
-      resources: '/api/courses/:courseId',
-      permissions: ['get']
-    }]
-  }]);
+      roles: ['user'],
+      allows: [{
+        resources: '/api/courses',
+        permissions: ['get']
+      }, {
+          resources: '/api/courses/:courseId',
+          permissions: ['get']
+        }, {
+          resources: '/api/courses/:courseId/addPoints',
+          permissions: '*'
+        }]
+    }]);
 };
 
 /**
