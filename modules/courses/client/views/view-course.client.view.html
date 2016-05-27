@@ -14,6 +14,7 @@
   </div>
 
   <div ng-repeat="category in vm.course.categories" class="category" ng-init="catId = $index">
+    <h2>{{category.name}}</h2>
     <div ng-repeat="row in vm.chapterRows(category.chapters)" class="row" ng-init="chapters = vm.rowChapters(category.chapters, $index)">
       <div ng-repeat="chapter in chapters" data-ui-sref="courses.viewchapter({ courseId: vm.course._id, categoryId: catId, chapterId: vm.chapterId(category.chapters, chapter) })"
         class="chapter-thumb {{vm.centerChapter(chapters, $index)}}" ng-class="{ 'x2': chapters.length == 1, 'pull-left': !chapter.isSpacer, 'clearfix': chapter.isSpacer }">
@@ -25,5 +26,6 @@
       </div>
     </div>
     <div class="clearfix"></div>
+    <hr />
   </div>
 </section>
