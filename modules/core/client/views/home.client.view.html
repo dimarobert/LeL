@@ -1,4 +1,4 @@
-<section ng-controller="HomeController">
+<section id="home" ng-controller="HomeController">
   <div class="jumbotron text-center">
     <div class="row">
       <div class="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
@@ -11,21 +11,55 @@
         Start learning some english!
       </p>
       <p ng-show="authentication.user" class="lead">
-        Now go choose a course to begin!
+        <span ng-show="authentication.user.startedCourses.length">
+          Continue your journey!
+        </span>
+        <span ng-show="!authentication.user.startedCourses.length">
+          Now go choose a course to begin!
+        </span>
       </p>
     </div>
     <!--{{ authentication.user }}-->
     <div class="row">
       <p ng-hide="authentication.user">
-        <a class="btn btn-primary btn-lg" ui-sref="authentication.signin">Login</a>
-        OR
+        <a class="btn btn-primary btn-lg" ui-sref="authentication.signin">Login</a> OR
         <a class="btn btn-primary btn-lg" ui-sref="authentication.signup">Register</a>
       </p>
       <p ng-show="authentication.user">
-        <a ng-show="authentication.user.startedCourses.length" ui-sref="courses.list">Continue</a>
+        <a class="btn btn-success btn-lg" ng-show="authentication.user.startedCourses.length" ui-sref="courses.list">Continue</a>
         <a class="btn btn-success btn-lg" ng-show="!authentication.user.startedCourses.length" ui-sref="courses.list">Start</a>
       </p>
     </div>
   </div>
-<div class="row"></div>
+  <div ng-if="authentication.user.startedCourses.length">
+    <h2>Top 15 for courses that you participate in</h2>
+    <div class="row" ng-repeat="course in userCourses">
+      <div class="col-xs-12">
+        <h4>{{course.name}}</h4>
+        <table class="table table-striped">
+          <tr>
+            <th>Place</th>
+            <th>User</th>
+            <th>Points</th>
+          </tr>
+
+          <tr ng-repeat="user in getTop15($index)" ng-class="{currentUser: user._id == authentication.user._id}">
+            <td>{{$index + 1}}</td>
+            <td>{{user.displayName}}</td>
+            <td>{{user.score}}</td>
+          </tr>
+          <tr ng-if="userNotInTop15($index)">
+            <td>...</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr ng-if="userNotInTop15($index)" class="currentUser">
+            <td>{{userPlace[$index].place}}</td>
+            <td>{{authentication.user.displayName}}</td>
+            <td>{{userPlace[$index].score}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>

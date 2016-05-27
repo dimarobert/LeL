@@ -10,6 +10,8 @@ module.exports = function (app) {
   app.route('/api/users/accounts').delete(users.removeOAuthProvider);
   app.route('/api/users/password').post(users.changePassword);
   app.route('/api/users/picture').post(users.changeProfilePicture);
+  app.route('/api/users/top15/:courseId').get(users.top15);
+  app.route('/api/users/top15/:courseId/currentuserplace').get(users.currentUserPlace);
 
   // Finish by binding the user middleware
   app.param('userId', users.userByID);

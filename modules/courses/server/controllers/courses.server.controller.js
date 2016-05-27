@@ -12,11 +12,11 @@ var path = require('path'),
 /**
  * Create a Course
  */
-exports.create = function(req, res) {
+exports.create = function (req, res) {
   var course = new Course(req.body);
   course.user = req.user;
 
-  course.save(function(err) {
+  course.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -30,7 +30,7 @@ exports.create = function(req, res) {
 /**
  * Show the current Course
  */
-exports.read = function(req, res) {
+exports.read = function (req, res) {
   // convert mongoose document to JSON
   var course = req.course ? req.course.toJSON() : {};
 
@@ -44,12 +44,12 @@ exports.read = function(req, res) {
 /**
  * Update a Course
  */
-exports.update = function(req, res) {
-  var course = req.course ;
+exports.update = function (req, res) {
+  var course = req.course;
 
-  course = _.extend(course , req.body);
+  course = _.extend(course, req.body);
 
-  course.save(function(err) {
+  course.save(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -63,10 +63,10 @@ exports.update = function(req, res) {
 /**
  * Delete an Course
  */
-exports.delete = function(req, res) {
-  var course = req.course ;
+exports.delete = function (req, res) {
+  var course = req.course;
 
-  course.remove(function(err) {
+  course.remove(function (err) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -80,8 +80,8 @@ exports.delete = function(req, res) {
 /**
  * List of Courses
  */
-exports.list = function(req, res) { 
-  Course.find().sort('-created').populate('user', 'displayName').exec(function(err, courses) {
+exports.list = function (req, res) {
+  Course.find().sort('-created').populate('user', 'displayName').exec(function (err, courses) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -95,7 +95,7 @@ exports.list = function(req, res) {
 /**
  * Course middleware
  */
-exports.courseByID = function(req, res, next, id) {
+exports.courseByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -114,4 +114,57 @@ exports.courseByID = function(req, res, next, id) {
     req.course = course;
     next();
   });
+};
+
+exports.addPoints = function (req, res) {
+  var lessonResults = req.body.results;
+  var lessonId = lessonResults._id;
+
+  var currentCourse = req.course;
+  var points = 0;
+  for (var question of lessonResults.questions) {
+    points += question.points || 0;
+  }
+
+  req.user.populate('startedCourses');
+  var userCourses = req.user.startedCourses;
+
+  if (userCourses.findIndex(function (val) {
+    return val.course.equals(currentCourse._id);
+  }) === -1) {
+    userCourses.push({ course: currentCourse._id, finishedLessons: [] });
+    req.user.save(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+    });
+  }
+
+  var currentUserCourse = userCourses.find(function (val) {
+    return val.course.equals(currentCourse._id);
+  });
+
+  var currentUserLesson = currentUserCourse.finishedLessons.find(function (val) {
+    return val.id === lessonId;
+  });
+
+  if (!currentUserLesson) {
+    currentUserCourse.finishedLessons.push({
+      id: lessonId,
+      points: points
+    });
+  } else {
+    currentUserLesson.points = Math.max(currentUserLesson.points, points);
+  }
+
+  req.user.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+
 };

@@ -70,3 +70,7 @@ a:hover .header-profile-image {
 #logo:hover .remaining-word:after {
   left: 90%;
 }
+
+.currentUser {
+  color: green;
+}
