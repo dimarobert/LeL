@@ -21,6 +21,13 @@
     vm.hoverShowCaption = hoverShowCaption;
     vm.blurHideCaption = blurHideCaption;
 
+    vm.chapterId = chapterId;
+
+    function chapterId(chapters, chapter) {
+      return chapters.findIndex(function (v) {
+        return v == chapter;
+      });
+    }
 
     function chapterRows(chapters) {
       var ret = chapters.reduce(function (prev, next) {
